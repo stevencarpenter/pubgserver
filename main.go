@@ -16,7 +16,7 @@ func init() {
 	// Initialize the Redis client
 	redisClient = redis.NewClient(&redis.Options{
 		Addr:     "redis-c82bfc2f:6379",
-		Password: "password",
+		Password: "secret",
 		DB:       0,
 	})
 
@@ -54,6 +54,6 @@ func getAccountData(w http.ResponseWriter, r *http.Request) {
 func main() {
 	http.HandleFunc("/pubg/leaderboard", getAccountData)
 
-	fmt.Println("Server is running on http://localhost:8080")
+	fmt.Println("Server is running on http://localhost:8090")
 	log.Fatal(http.ListenAndServe(":8090", nil))
 }
