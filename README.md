@@ -13,8 +13,9 @@ docker build -t pubgserver .
 ## Usage
 ```shell
 curl -X GET "localhost:8090/pubg/leaderboard?accountId=account.28b08053492a44659f8bf0517d8c3580"```
-
+```
 Response:
+
 ```json
-{"account.28b08053492a44659f8bf0517d8c3580":"{\"rank\":164,\"wins\":49,\"games\":201}"}
+{"games":"205","rank":"258","wins":"50"}
 ```
