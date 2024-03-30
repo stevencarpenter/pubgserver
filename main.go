@@ -3,24 +3,28 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/redis/go-redis/v9"
 	"log"
 	"net/http"
+	"os"
 )
 
 var ctx = context.Background()
-var redisClient *redis.Client
+var rdb *redis.Client
+
+var REDIS_PASSWORD = os.Getenv("REDIS_PASSWORD")
 
 func init() {
 	// Initialize the Redis client
-	redisClient = redis.NewClient(&redis.Options{
+	rdb = redis.NewClient(&redis.Options{
 		Addr:     "redis-c82bfc2f:6379",
-		Password: "secret",
+		Password: REDIS_PASSWORD,
 		DB:       0,
 	})
 
-	pong, err := redisClient.Ping(ctx).Result()
+	pong, err := rdb.Ping(ctx).Result()
 	if err != nil {
 		log.Fatalf("Could not connect to Redis: %v", err)
 	}
@@ -34,8 +38,8 @@ func getAccountData(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	data, err := redisClient.Get(ctx, accountId).Result()
-	if err == redis.Nil {
+	data, err := rdb.HGetAll(ctx, accountId).Result()
+	if errors.Is(err, redis.Nil) {
 		http.NotFound(w, r)
 		return
 	} else if err != nil {
@@ -45,7 +49,7 @@ func getAccountData(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	if err := json.NewEncoder(w).Encode(map[string]string{accountId: data}); err != nil {
+	if err := json.NewEncoder(w).Encode(data); err != nil {
 		log.Printf("Error encoding response: %v", err)
 		http.Error(w, "Error encoding response", http.StatusInternalServerError)
 	}

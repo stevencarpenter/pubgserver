@@ -12,10 +12,9 @@ docker build -t pubgserver .
 
 ## Usage
 ```shell
-curl -X GET "localhost:8090/pubg/leaderboard?accountId=player1"
-```
+curl -X GET "localhost:8090/pubg/leaderboard?accountId=account.28b08053492a44659f8bf0517d8c3580"```
 
 Response:
 ```json
-{"player1":"{\"rank\":6,\"wins\":7,\"games\":10}"}
+{"account.28b08053492a44659f8bf0517d8c3580":"{\"rank\":164,\"wins\":49,\"games\":201}"}
 ```
